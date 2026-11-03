@@ -1,5 +1,6 @@
 ---
 import type { NoteDocument } from '../lib/library';
+import ProgressMark from './ProgressMark.astro';
 
 interface Props {
   previous?: NoteDocument;
@@ -19,7 +20,10 @@ const { previous, next } = Astro.props;
         href={previous.href}
         class="group rounded-xl border border-ivory-deep bg-white/40 p-4 no-underline transition hover:border-terracotta/40"
       >
-        <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Previous chapter</span>
+        <span class="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
+          {previous.kind === 'topic' && <ProgressMark kind="chapter" id={previous.id} />}
+          Previous chapter
+        </span>
         <span class="mt-1 block font-serif text-lg text-ink group-hover:text-terracotta">
           {previous.title}
         </span>
@@ -32,7 +36,10 @@ const { previous, next } = Astro.props;
         href={next.href}
         class="group rounded-xl border border-ivory-deep bg-white/40 p-4 text-right no-underline transition hover:border-terracotta/40 sm:col-start-2"
       >
-        <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Next chapter</span>
+        <span class="flex items-center justify-end gap-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
+          Next chapter
+          {next.kind === 'topic' && <ProgressMark kind="chapter" id={next.id} />}
+        </span>
         <span class="mt-1 block font-serif text-lg text-ink group-hover:text-terracotta">
           {next.title}
         </span>

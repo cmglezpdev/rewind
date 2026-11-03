@@ -1,5 +1,6 @@
 ---
 import type { Course } from '../lib/library';
+import ProgressMark from './ProgressMark.astro';
 
 interface Props {
   course: Course;
@@ -12,6 +13,7 @@ const lessonCount = course.videos.length;
 ---
 
 <article
+  data-progress-scope
   class:list={[
     'flex h-full flex-col overflow-hidden rounded-xl border bg-white/50 shadow-sm transition',
     active ? 'border-terracotta/50 ring-1 ring-terracotta/30' : 'border-ivory-deep hover:border-terracotta/30',
@@ -30,11 +32,12 @@ const lessonCount = course.videos.length;
       />
     </span>
     <div class="flex flex-1 flex-col gap-3 p-4">
-      <h3 class="font-serif text-xl font-normal leading-snug text-ink hover:text-terracotta">{course.name}</h3>
+      <h3 class="progress-title font-serif text-xl font-normal leading-snug text-ink hover:text-terracotta">{course.name}</h3>
       <span class="line-clamp-3 flex-1 text-sm leading-relaxed text-ink-muted">{course.description}</span>
       <span class="text-xs uppercase tracking-wide text-ink-faint">
         {lessonCount} {lessonCount === 1 ? 'lesson' : 'lessons'}
       </span>
+      <ProgressMark kind="course" id={course.id} text bar lessons={lessonCount} />
     </div>
   </a>
   <div class="px-4 pb-4">
