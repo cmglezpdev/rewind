@@ -13,7 +13,7 @@ const onLibrary = Astro.url.pathname === '/' || Astro.url.pathname === '';
 <header class="sticky top-0 z-40 border-b border-ivory-deep bg-ivory/95 backdrop-blur-sm" data-site-header>
   <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6">
     <div class="flex min-w-0 items-center gap-6">
-      <a href="/" class="font-serif text-xl tracking-tight text-ink no-underline hover:text-terracotta">
+      <a href="/" class="inline-flex min-h-11 items-center font-serif text-xl tracking-tight text-ink no-underline hover:text-terracotta">
         Rewind
       </a>
       <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
@@ -21,7 +21,7 @@ const onLibrary = Astro.url.pathname === '/' || Astro.url.pathname === '';
           href="/"
           data-nav-course=""
           class:list={[
-            'rounded-full px-3 py-1.5 text-sm no-underline transition',
+            'inline-flex min-h-11 items-center rounded-full px-3 py-1.5 text-sm no-underline transition',
             onLibrary && !activeCourseId ? 'bg-terracotta-soft text-terracotta-deep' : 'text-ink-muted hover:text-terracotta',
           ]}
           aria-current={onLibrary && !activeCourseId ? 'page' : undefined}
@@ -35,7 +35,7 @@ const onLibrary = Astro.url.pathname === '/' || Astro.url.pathname === '';
               href={`/?course=${encodeURIComponent(course.id)}`}
               data-nav-course={course.id}
               class:list={[
-                'max-w-[12rem] truncate rounded-full px-3 py-1.5 text-sm no-underline transition',
+                'min-h-11 content-center max-w-[12rem] truncate rounded-full px-3 py-1.5 text-sm no-underline transition',
                 active ? 'bg-terracotta-soft text-terracotta-deep' : 'text-ink-muted hover:text-terracotta',
               ]}
               aria-current={active ? 'page' : undefined}
@@ -47,7 +47,7 @@ const onLibrary = Astro.url.pathname === '/' || Astro.url.pathname === '';
         })}
       </nav>
     </div>
-    <a href="/notes/readme/" class="text-sm text-ink-muted no-underline hover:text-terracotta">
+    <a href="/notes/readme/" class="inline-flex min-h-11 items-center text-sm text-ink-muted no-underline hover:text-terracotta">
       Markdown index
     </a>
   </div>

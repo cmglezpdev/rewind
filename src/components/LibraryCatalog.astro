@@ -26,6 +26,7 @@ const payload = JSON.stringify({ videos, initialCourseId });
       {videos.length} videos and {courses.length} courses, with chapter notes and transcripts.
       Search by title, then narrow by course, tag, or language.
     </p>
+    <a href="#catalog-filters" class="btn-ghost mt-5 no-underline md:hidden">Search videos</a>
   </div>
 
   {courses.length > 0 && (
@@ -41,7 +42,7 @@ const payload = JSON.stringify({ videos, initialCourseId });
     </div>
   )}
 
-  <div class="mb-8 flex flex-col gap-4 rounded-2xl border border-ivory-deep bg-white/40 p-4 md:p-6">
+  <div id="catalog-filters" class="mb-8 flex flex-col gap-4 rounded-2xl border border-ivory-deep bg-white/40 p-4 md:p-6">
     <div class="flex flex-col gap-3 lg:flex-row lg:items-end">
       <label class="flex flex-1 flex-col gap-1.5">
         <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Search</span>
@@ -51,14 +52,14 @@ const payload = JSON.stringify({ videos, initialCourseId });
           data-filter-search
           placeholder="Title or description"
           autocomplete="off"
-          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink placeholder:text-ink-faint/70"
+          class="min-h-11 w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink placeholder:text-ink-faint/70"
         />
       </label>
       <label class="flex w-full flex-col gap-1.5 lg:w-52">
         <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Course</span>
         <select
           data-filter-course
-          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
+          class="min-h-11 w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
         >
           <option value="">All videos</option>
           {courses.map((course) => (
@@ -72,7 +73,7 @@ const payload = JSON.stringify({ videos, initialCourseId });
         <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Language</span>
         <select
           data-filter-language
-          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
+          class="min-h-11 w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
         >
           <option value="">All languages</option>
           {languages.map((code) => (
