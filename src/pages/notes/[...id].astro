@@ -4,10 +4,13 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import ArticleSidebar from '../../components/ArticleSidebar.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import DocNav from '../../components/DocNav.astro';
+import ProgressMark from '../../components/ProgressMark.astro';
+import ProgressToggle from '../../components/ProgressToggle.astro';
 import MermaidEnhancer from '../../components/MermaidEnhancer.astro';
 import { chapterDocuments, findCourse, findVideo, neighbors } from '../../components/navigation';
 import { kindLabel, languageLabel } from '../../components/labels';
 import { getDocument, getLibrary } from '../../lib/library';
+import { chapterIdsOf } from '../../lib/progress-manifest';
 import { defaultRepository, githubEditUrl } from '../../lib/repository';
 
 export async function getStaticPaths() {
@@ -34,6 +37,10 @@ const pageLang = video?.language && video.language !== 'und' ? video.language : 
 const sourceUrl = video?.url || course?.url;
 const sourceLabel = video?.url ? 'Watch on YouTube' : course?.url ? 'Open course source' : '';
 const showSidebar = chapters.length > 0 || Boolean(course);
+const isChapter = document.kind === 'topic' && Boolean(video);
+const isVideoOverview = document.kind === 'overview' && Boolean(video) && chapterIdsOf(video!).length > 0;
+const isCourseOverview = document.kind === 'overview' && !video && Boolean(course);
+const showActions = Boolean(sourceUrl) || isChapter || isVideoOverview;
 const editUrl = githubEditUrl({
   repositoryUrl: import.meta.env.GITHUB_REPOSITORY_URL ?? defaultRepository.url,
   branch: import.meta.env.GITHUB_EDIT_BRANCH ?? defaultRepository.branch,
@@ -76,6 +83,7 @@ const editUrl = githubEditUrl({
           courseName={course?.name}
           lessons={course && !video ? course.videos : []}
           currentVideoId={video?.id}
+          courseId={course?.id}
         />
       </div>
     )}
@@ -90,11 +98,18 @@ const editUrl = githubEditUrl({
           {video && video.language && video.language !== 'und' && (
             <p class="mt-2 text-sm text-ink-faint">{[video.channel, video.duration, languageLabel(video.language)].filter(Boolean).join(' · ')}</p>
           )}
-          {(sourceUrl || editUrl) && (
+          {isChapter && <ProgressMark kind="chapter" id={document.id} text class="mt-4" />}
+          {isVideoOverview && video && <ProgressMark kind="video" id={video.id} text bar class="mt-4 w-full max-w-xs" />}
+          {isCourseOverview && course && (
+            <ProgressMark kind="course" id={course.id} text bar lessons={course.videos.length} class="mt-4 w-full max-w-xs" />
+          )}
+          {(showActions || editUrl) && (
             <div class="mt-4 flex flex-wrap gap-3">
               {sourceUrl && <a href={sourceUrl} class="btn-primary no-underline" rel="noopener noreferrer" target="_blank">
                 {sourceLabel}
               </a>}
+              {isChapter && <ProgressToggle kind="chapter" id={document.id} />}
+              {isVideoOverview && video && <ProgressToggle kind="video" id={video.id} />}
               {video && document.kind !== 'overview' && (
                 <a href={video.overview.href} class="btn-ghost no-underline">Video overview</a>
               )}
@@ -104,6 +119,13 @@ const editUrl = githubEditUrl({
         </header>
 
         <div class="article-body" set:html={document.html} />
+
+        {isChapter && (
+          <div class="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-ivory-deep bg-white/40 p-4">
+            <p class="font-serif text-lg text-ink">Finished this chapter?</p>
+            <ProgressToggle kind="chapter" id={document.id} />
+          </div>
+        )}
 
         <DocNav previous={previous} next={next} />
       </article>
@@ -117,6 +139,7 @@ const editUrl = githubEditUrl({
             courseName={course?.name}
             lessons={course && !video ? course.videos : []}
             currentVideoId={video?.id}
+            courseId={course?.id}
           />
         )}
         <TableOfContents headings={document.headings} label={tocLabel} />

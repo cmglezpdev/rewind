@@ -1,0 +1,14 @@
+---
+interface Props {
+  kind: 'chapter' | 'video';
+  id: string;
+  class?: string;
+}
+
+const { kind, id, class: className } = Astro.props;
+---
+
+<!-- Disabled until the progress script has loaded, so a click can't act on unknown state. -->
+<button type="button" class:list={['btn-ghost progress-toggle', className]} data-progress-toggle={`${kind}:${id}`} disabled>
+  <span data-progress-toggle-label>{kind === 'chapter' ? 'Mark as read' : 'Mark video as read'}</span>
+</button>
