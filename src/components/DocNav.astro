@@ -18,7 +18,7 @@ const { previous, next } = Astro.props;
     {previous ? (
       <a
         href={previous.href}
-        class="group rounded-xl border border-ivory-deep bg-white/40 p-4 no-underline transition hover:border-terracotta/40"
+        class="group rounded-xl border border-ivory-deep bg-surface/40 p-4 no-underline transition hover:border-terracotta/40"
       >
         <span class="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
           {previous.kind === 'topic' && <ProgressMark kind="chapter" id={previous.id} />}
@@ -34,7 +34,7 @@ const { previous, next } = Astro.props;
     {next ? (
       <a
         href={next.href}
-        class="group rounded-xl border border-ivory-deep bg-white/40 p-4 text-right no-underline transition hover:border-terracotta/40 sm:col-start-2"
+        class="group rounded-xl border border-ivory-deep bg-surface/40 p-4 text-right no-underline transition hover:border-terracotta/40 sm:col-start-2"
       >
         <span class="flex items-center justify-end gap-2 text-xs font-medium uppercase tracking-wide text-ink-faint">
           Next chapter

@@ -89,7 +89,7 @@ const editUrl = githubEditUrl({
     )}
 
     {document.headings.some((heading) => heading.depth >= 2) && (
-      <details class="mb-6 rounded-xl border border-ivory-deep bg-white/40 p-4 lg:hidden">
+      <details class="mb-6 rounded-xl border border-ivory-deep bg-surface/40 p-4 lg:hidden">
         <summary class="min-h-11 content-center cursor-pointer text-sm font-medium text-ink">{tocLabel}</summary>
         <div class="mt-4 max-h-[50dvh] overflow-y-auto">
           <TableOfContents headings={document.headings} label={tocLabel} />
@@ -130,7 +130,7 @@ const editUrl = githubEditUrl({
         <div class="article-body" set:html={document.html} />
 
         {isChapter && (
-          <div class="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-ivory-deep bg-white/40 p-4">
+          <div class="mt-12 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-ivory-deep bg-surface/40 p-4">
             <p class="font-serif text-lg text-ink">Finished this chapter?</p>
             <ProgressToggle kind="chapter" id={document.id} />
           </div>

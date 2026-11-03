@@ -1,0 +1,30 @@
+---
+import themeSelectSource from '../lib/theme/selector.ts?raw';
+import { inlineTypeScript } from '../lib/inline-script';
+
+const themeSelectScript = inlineTypeScript(themeSelectSource);
+---
+
+<div class="relative inline-flex items-center text-sm text-ink-muted">
+  <select
+    id="theme-preference"
+    aria-label="Theme"
+    data-theme-select
+    class="min-h-11 appearance-none rounded-full border border-ivory-deep bg-surface py-1.5 pl-3 pr-9 text-sm text-ink"
+  >
+    <option value="system">System</option>
+    <option value="light">Light</option>
+    <option value="dark">Dark</option>
+  </select>
+  <script is:inline set:html={themeSelectScript} />
+  <svg
+    class="pointer-events-none absolute right-3 h-4 w-4 text-ink"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    aria-hidden="true"
+  >
+    <path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</div>

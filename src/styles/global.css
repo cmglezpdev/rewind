@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-surface: #ffffff;
+  --color-on-accent: #ffffff;
+  --color-code-bg: #1c1917;
+  --color-code-text: #f7f3eb;
   --color-ivory: #f7f3eb;
   --color-ivory-deep: #ede6d9;
   --color-ink: #1c1917;
@@ -11,6 +15,41 @@
   --color-terracotta-soft: #f0ddd6;
   --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif;
   --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+/* System mode also works when JavaScript is disabled. Explicit choices win. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --color-surface: #282320;
+    --color-ivory: #1c1917;
+    --color-ivory-deep: #39322d;
+    --color-ink: #f7f3eb;
+    --color-ink-muted: #d1c7bc;
+    --color-ink-faint: #afa398;
+    --color-terracotta: #ee987b;
+    --color-terracotta-deep: #ffb49a;
+    --color-terracotta-soft: #493027;
+    --color-on-accent: #1c1917;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-surface: #282320;
+  --color-ivory: #1c1917;
+  --color-ivory-deep: #39322d;
+  --color-ink: #f7f3eb;
+  --color-ink-muted: #d1c7bc;
+  --color-ink-faint: #afa398;
+  --color-terracotta: #ee987b;
+  --color-terracotta-deep: #ffb49a;
+  --color-terracotta-soft: #493027;
+  --color-on-accent: #1c1917;
 }
 
 @layer base {
@@ -33,6 +72,39 @@
   }
 }
 
+/* Reveal the new page snapshot diagonally from top-right to bottom-left. */
+:root[data-theme-transition] *,
+:root[data-theme-transition] *::before,
+:root[data-theme-transition] *::after {
+  /* Capture the final palette, rather than midway through hover/color transitions. */
+  transition: none;
+}
+
+:root[data-theme-transition]::view-transition-group(root) {
+  animation: none;
+}
+
+:root[data-theme-transition]::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root[data-theme-transition]::view-transition-new(root) {
+  animation: theme-sweep 550ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  mix-blend-mode: normal;
+}
+
+@keyframes theme-sweep {
+  from { clip-path: polygon(100% 0, 100% 0, 100% 0); }
+  to { clip-path: polygon(-100% 0, 100% 0, 100% 200%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-transition]::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 @layer components {
   .skip-link {
     position: absolute;
@@ -41,7 +113,7 @@
     z-index: 50;
     border-radius: 9999px;
     background: var(--color-terracotta);
-    color: var(--color-ivory);
+    color: var(--color-on-accent);
     padding: 0.5rem 1rem;
   }
 
@@ -142,7 +214,7 @@
   }
 
   .article-body pre {
-    @apply my-6 overflow-x-auto rounded-md bg-ink text-ivory p-4 text-sm leading-relaxed;
+    @apply my-6 overflow-x-auto rounded-md bg-code-bg text-code-text p-4 text-sm leading-relaxed;
     font-family: ui-monospace, monospace;
   }
 
@@ -160,7 +232,7 @@
   }
 
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm font-medium text-ivory transition hover:bg-terracotta-deep;
+    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm font-medium text-on-accent transition hover:bg-terracotta-deep;
   }
 
   .btn-ghost {
@@ -168,7 +240,7 @@
   }
 
   .chip {
-    @apply inline-flex items-center rounded-full border border-ivory-deep bg-white/60 px-3 py-1 text-xs font-medium text-ink-muted transition;
+    @apply inline-flex items-center rounded-full border border-ivory-deep bg-surface/60 px-3 py-1 text-xs font-medium text-ink-muted transition;
   }
 
   a.chip,
@@ -217,7 +289,7 @@
 
   .progress-glyph .pg-check {
     fill: none;
-    stroke: var(--color-ivory);
+    stroke: var(--color-on-accent);
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
