@@ -2,13 +2,13 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { runInNewContext } from 'node:vm';
+import { inlineTypeScript } from './inline-script';
 
-const script = readFileSync(new URL('../scripts/theme.js', import.meta.url), 'utf8');
-const selectMarkup = readFileSync(new URL('../components/ThemeSelect.astro', import.meta.url), 'utf8');
-const selectScript = selectMarkup.match(/<script is:inline>([\s\S]*?)<\/script>/)?.[1];
+const script = inlineTypeScript(readFileSync(new URL('../scripts/theme.ts', import.meta.url), 'utf8'));
+const selectScript = inlineTypeScript(readFileSync(new URL('../scripts/theme-select.ts', import.meta.url), 'utf8'));
 
-function setup({ saved = null, dark = false, blocked = false }: {
-  saved?: string | null; dark?: boolean; blocked?: boolean;
+function setup({ saved = null, dark = false, blocked = false, reducedMotion = false, animated = false }: {
+  saved?: string | null; dark?: boolean; blocked?: boolean; reducedMotion?: boolean; animated?: boolean;
 } = {}) {
   class Select extends EventTarget {
     value = 'system';
@@ -21,13 +21,31 @@ function setup({ saved = null, dark = false, blocked = false }: {
     querySelectorAll: () => [select],
   });
   const system = Object.assign(new EventTarget(), { matches: dark });
+  const transitions: { update: () => void; skipped: boolean; finish: () => void }[] = [];
+  if (animated) {
+    Object.assign(document, {
+      startViewTransition(update: () => void) {
+        let finish = () => {};
+        const finished = new Promise<void>((resolve) => { finish = resolve; });
+        const record = { update, skipped: false, finish };
+        transitions.push(record);
+        return {
+          ready: Promise.resolve(), finished,
+          skipTransition() { record.skipped = true; finish(); },
+        };
+      },
+    });
+  }
   const storage = new Map<string, string>();
   if (saved !== null) storage.set('rewind-theme', saved);
   const localStorage = {
     getItem(key: string) { if (blocked) throw new Error('blocked'); return storage.get(key) ?? null; },
     setItem(key: string, value: string) { if (blocked) throw new Error('blocked'); storage.set(key, value); },
   };
-  const window = Object.assign(new EventTarget(), { localStorage, matchMedia: () => system });
+  const window = Object.assign(new EventTarget(), {
+    localStorage,
+    matchMedia: (query: string) => query.includes('color-scheme') ? system : { matches: reducedMotion },
+  });
   let themeChanges = 0;
   window.addEventListener('theme-change', () => themeChanges++);
   // Capture the delegated change handler while exercising the real head script.
@@ -39,12 +57,11 @@ function setup({ saved = null, dark = false, blocked = false }: {
   };
   runInNewContext(script, { window, document, Event, HTMLSelectElement: Select });
   return {
-    document, select, storage,
+    document, select, storage, transitions,
     theme: () => document.documentElement.dataset.theme,
     changes: () => themeChanges,
     ready: () => document.dispatchEvent(new Event('DOMContentLoaded')),
     parseSelect() {
-      if (!selectScript) throw new Error('Missing theme selector initialization script');
       // The static select is parsed after the head script and starts at System.
       select.value = 'system';
       runInNewContext(selectScript, { document, HTMLSelectElement: Select });
@@ -143,4 +160,43 @@ test('theme events fire only when the resolved appearance changes', () => {
   assert.equal(app.changes(), 1);
   app.choose('dark');
   assert.equal(app.changes(), 2);
+});
+
+test('only explicit appearance changes animate, and completion clears the transition marker', async () => {
+  const app = setup({ animated: true });
+  app.ready();
+  app.choose('light');
+  assert.equal(app.transitions.length, 0);
+  app.choose('dark');
+  assert.equal(app.transitions.length, 1);
+  assert.equal(app.theme(), 'light');
+  const transition = app.transitions[0];
+  transition.update();
+  assert.equal(app.theme(), 'dark');
+  assert.equal('themeTransition' in app.document.documentElement.dataset, true);
+  transition.finish();
+  await Promise.resolve();
+  assert.equal('themeTransition' in app.document.documentElement.dataset, false);
+});
+
+test('reduced motion and unsupported browsers apply choices immediately', () => {
+  for (const options of [{ animated: true, reducedMotion: true }, { animated: false }]) {
+    const app = setup(options);
+    app.choose('dark');
+    assert.equal(app.theme(), 'dark');
+    assert.equal(app.transitions.length, 0);
+  }
+});
+
+test('rapid selections cancel the sweep and pending callbacks use the latest choice', async () => {
+  const app = setup({ animated: true });
+  app.choose('dark');
+  const first = app.transitions[0];
+  app.choose('light');
+  assert.equal(first.skipped, true);
+  first.update();
+  first.finish();
+  await Promise.resolve();
+  assert.equal(app.theme(), 'light');
+  assert.equal('themeTransition' in app.document.documentElement.dataset, false);
 });

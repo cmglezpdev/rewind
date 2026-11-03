@@ -72,6 +72,39 @@
   }
 }
 
+/* Reveal the new page snapshot diagonally from top-right to bottom-left. */
+:root[data-theme-transition] *,
+:root[data-theme-transition] *::before,
+:root[data-theme-transition] *::after {
+  /* Capture the final palette, rather than midway through hover/color transitions. */
+  transition: none;
+}
+
+:root[data-theme-transition]::view-transition-group(root) {
+  animation: none;
+}
+
+:root[data-theme-transition]::view-transition-old(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root[data-theme-transition]::view-transition-new(root) {
+  animation: theme-sweep 550ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  mix-blend-mode: normal;
+}
+
+@keyframes theme-sweep {
+  from { clip-path: polygon(100% 0, 100% 0, 100% 0); }
+  to { clip-path: polygon(-100% 0, 100% 0, 100% 200%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme-transition]::view-transition-new(root) {
+    animation: none;
+  }
+}
+
 @layer components {
   .skip-link {
     position: absolute;
