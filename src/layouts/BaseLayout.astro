@@ -8,7 +8,8 @@ interface Props {
 }
 
 const { title, description = 'Structured notes from video talks and courses.', lang = 'en' } = Astro.props;
-const fullTitle = title === 'Library' ? 'Video Notes' : `${title} · Video Notes`;
+const fullTitle = title === 'Library' ? 'Rewind · Keep what you learn.' : `${title} · Rewind`;
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
 <!doctype html>
@@ -17,6 +18,12 @@ const fullTitle = title === 'Library' ? 'Video Notes' : `${title} · Video Notes
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:site_name" content="Rewind" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>

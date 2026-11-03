@@ -1,6 +1,10 @@
-# Video notes
+# Rewind
+
+Keep what you learn.
 
 A public library of video notes, transcripts, and courses, with an Astro, Tailwind CSS, and TypeScript reader. The Markdown stays in the repository so you can read it in Obsidian, edit it locally, or ask an AI assistant questions about a transcript.
+
+The configured website address is `https://rewind.cmglezp.dev`. Hosting and DNS are configured separately.
 
 ## Run locally
 

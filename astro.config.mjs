@@ -4,5 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://rewind.cmglezp.dev',
   vite: { plugins: [tailwindcss()] },
 });

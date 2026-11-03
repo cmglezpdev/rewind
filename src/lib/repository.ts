@@ -1,5 +1,5 @@
 export const defaultRepository = {
-  url: 'https://github.com/cmglezpdev/video-notes',
+  url: 'https://github.com/cmglezpdev/rewind',
   branch: 'main',
 };
 

@@ -1,4 +1,4 @@
-# Maintain the video notes reader
+# Maintain Rewind
 
 Use Node.js 22.23.4 or newer. Run `npm install`, then `npm run dev -- --background`. Manage the server with `npm run astro -- dev status`, `npm run astro -- dev logs`, and `npm run astro -- dev stop`.
 
@@ -22,7 +22,7 @@ The build runs `validate:library`, checks publishing metadata and internal Markd
 
 ## Enable GitHub editing
 
-Edit links use `https://github.com/cmglezpdev/video-notes` and the `main` branch by default. These settings are committed in `src/lib/repository.ts` and work without environment variables.
+Edit links use `https://github.com/cmglezpdev/rewind` and the `main` branch by default. These settings are committed in `src/lib/repository.ts` and work without environment variables. Astro's site URL and canonical links use `https://rewind.cmglezp.dev`.
 
 To use another repository or branch, copy `.env.example` to `.env` and set `GITHUB_REPOSITORY_URL` and `GITHUB_EDIT_BRANCH`. Configure those overrides in the deployment environment too, then rebuild.
 
