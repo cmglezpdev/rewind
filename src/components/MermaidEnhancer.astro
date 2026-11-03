@@ -1,40 +1,55 @@
 <script>
-  async function renderMermaidBlocks() {
-    const codes = document.querySelectorAll('pre > code.language-mermaid');
+  async function enhanceMermaidBlocks() {
+    const codes = Array.from(document.querySelectorAll('pre > code.language-mermaid'));
     if (!codes.length) return;
-
     const mermaid = (await import('mermaid')).default;
-    mermaid.initialize({
-      startOnLoad: false,
-      securityLevel: 'strict',
-      theme: 'neutral',
-    });
-
-    let index = 0;
-    for (const code of codes) {
+    const diagrams = codes.map((code) => {
       const source = code.textContent?.trim() ?? '';
-      const pre = code.parentElement;
-      if (!pre || !source) continue;
-
       const mount = document.createElement('div');
       mount.className = 'mermaid';
       mount.setAttribute('role', 'img');
-      pre.replaceWith(mount);
+      mount.setAttribute('aria-label', 'Diagram');
+      code.parentElement?.replaceWith(mount);
+      return { source, mount };
+    });
+    let rendering = false;
+    let requested = false;
+    let renderId = 0;
 
+    async function render() {
+      requested = true;
+      if (rendering) return;
+      rendering = true;
       try {
-        const id = `mermaid-diagram-${index++}`;
-        const { svg } = await mermaid.render(id, source);
-        mount.innerHTML = svg;
-      } catch {
-        const fallback = document.createElement('pre');
-        const fallbackCode = document.createElement('code');
-        fallbackCode.className = 'language-mermaid';
-        fallbackCode.textContent = source;
-        fallback.append(fallbackCode);
-        mount.replaceWith(fallback);
+        // Serialize renders and repeat with the latest theme if it changed mid-render.
+        while (requested) {
+          requested = false;
+          mermaid.initialize({
+            startOnLoad: false,
+            securityLevel: 'strict',
+            theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'neutral',
+          });
+          for (const { source, mount } of diagrams) {
+            try {
+              const { svg } = await mermaid.render(`mermaid-diagram-${renderId++}`, source);
+              mount.innerHTML = svg;
+            } catch {
+              const fallback = document.createElement('pre');
+              const code = document.createElement('code');
+              code.textContent = source;
+              fallback.append(code);
+              mount.replaceChildren(fallback);
+            }
+          }
+        }
+      } finally {
+        rendering = false;
       }
     }
+
+    window.addEventListener('theme-change', render);
+    await render();
   }
 
-  renderMermaidBlocks();
+  enhanceMermaidBlocks();
 </script>
