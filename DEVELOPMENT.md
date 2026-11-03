@@ -4,7 +4,7 @@ Use Node.js 22.23.4 or newer. Run `npm install`, then `npm run dev -- --backgrou
 
 ## Add or edit notes
 
-Use `notes/` as the working library for beta prompts, Claude Code, Obsidian, and local edits. Read [notes/AGENTS.md](notes/AGENTS.md) for the generation workflow and frontmatter example. The root `CLAUDE.md` imports the repository instructions for Claude Code.
+Use `notes/` as the working library for generated notes, Claude Code, Obsidian, and local edits. The root [AGENTS.md](AGENTS.md) defines required output locations. Read [notes/AGENTS.md](notes/AGENTS.md) for the generation workflow and frontmatter example.
 
 Video and course metadata lives in each folder's README frontmatter. The first Markdown `#` heading supplies the displayed title; frontmatter `title` is the fallback. Chapter titles come from their own headings. The reader displays the title once and leaves source Markdown intact. Chapters inherit the video's source information in the reader.
 

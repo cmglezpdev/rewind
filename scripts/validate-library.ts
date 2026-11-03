@@ -1,6 +1,10 @@
 import { getDocument, getLibrary } from '../src/lib/library';
 import { access, readFile } from 'node:fs/promises';
 import { parseNote } from '../src/lib/frontmatter';
+import { findMisplacedNotes } from '../src/lib/note-location';
+
+const misplaced = await findMisplacedNotes(process.cwd());
+if (misplaced.length) throw new Error(`Generated notes must live inside notes/. Move these paths before publishing: ${misplaced.map((file) => `${file} -> notes/${file}`).join(', ')}. See AGENTS.md.`);
 
 const library = await getLibrary();
 const routes = new Set(library.documents.map((document) => document.href));
