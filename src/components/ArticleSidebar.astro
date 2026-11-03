@@ -41,7 +41,7 @@ const showCourseProgress = !videoName && Boolean(courseId) && lessonNav;
 {
   collapsible ? (
     <details class="rounded-xl border border-ivory-deep bg-white/40 p-4">
-      <summary class="cursor-pointer text-sm font-medium text-ink">
+      <summary class="min-h-11 content-center cursor-pointer text-sm font-medium text-ink">
         {chapterNav ? 'Chapters in this video' : 'Course lessons'}
       </summary>
       <div class="mt-4 space-y-6">
@@ -60,7 +60,7 @@ const showCourseProgress = !videoName && Boolean(courseId) && lessonNav;
                     <a
                       href={doc.href}
                       class:list={[
-                        'flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
+                        'flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
                         active
                           ? 'bg-terracotta-soft font-medium text-terracotta-deep'
                           : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
@@ -91,7 +91,7 @@ const showCourseProgress = !videoName && Boolean(courseId) && lessonNav;
                     <a
                       href={lesson.overview.href}
                       class:list={[
-                        'flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
+                        'flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
                         active
                           ? 'bg-terracotta-soft font-medium text-terracotta-deep'
                           : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
@@ -130,7 +130,7 @@ const showCourseProgress = !videoName && Boolean(courseId) && lessonNav;
                   <a
                     href={doc.href}
                     class:list={[
-                      'flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
+                      'flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
                       active
                         ? 'bg-terracotta-soft font-medium text-terracotta-deep'
                         : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
@@ -162,7 +162,7 @@ const showCourseProgress = !videoName && Boolean(courseId) && lessonNav;
                   <a
                     href={lesson.overview.href}
                     class:list={[
-                      'flex items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
+                      'flex min-h-11 items-start gap-2 rounded-md px-2 py-1.5 text-sm no-underline transition',
                       active
                         ? 'bg-terracotta-soft font-medium text-terracotta-deep'
                         : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',

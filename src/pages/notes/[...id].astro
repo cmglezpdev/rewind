@@ -61,7 +61,7 @@ const editUrl = githubEditUrl({
           </a>
         </>
       )}
-      {video && (
+      {video && video.overview.id !== document.id && (
         <>
           <span aria-hidden="true">/</span>
           <a href={video.overview.href} class="text-terracotta no-underline hover:underline">
@@ -86,6 +86,15 @@ const editUrl = githubEditUrl({
           courseId={course?.id}
         />
       </div>
+    )}
+
+    {document.headings.some((heading) => heading.depth >= 2) && (
+      <details class="mb-6 rounded-xl border border-ivory-deep bg-white/40 p-4 lg:hidden">
+        <summary class="min-h-11 content-center cursor-pointer text-sm font-medium text-ink">{tocLabel}</summary>
+        <div class="mt-4 max-h-[50dvh] overflow-y-auto">
+          <TableOfContents headings={document.headings} label={tocLabel} />
+        </div>
+      </details>
     )}
 
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem] xl:grid-cols-[minmax(0,1fr)_18rem]">
@@ -146,9 +155,6 @@ const editUrl = githubEditUrl({
       </div>
     </div>
 
-    <div class="mt-10 lg:hidden">
-      <TableOfContents headings={document.headings} label={tocLabel} />
-    </div>
   </div>
   <MermaidEnhancer />
 </BaseLayout>

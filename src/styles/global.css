@@ -16,6 +16,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 9rem;
   }
 
   body {
@@ -53,6 +54,7 @@
   }
 
   .article-body {
+    overflow-wrap: anywhere;
     @apply text-[1.0625rem] leading-[1.75] text-ink;
     font-family: var(--font-serif);
   }
@@ -158,15 +160,20 @@
   }
 
   .btn-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm font-medium text-ivory transition hover:bg-terracotta-deep;
+    @apply inline-flex min-h-11 items-center justify-center rounded-full bg-terracotta px-4 py-2 text-sm font-medium text-ivory transition hover:bg-terracotta-deep;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center justify-center rounded-full border border-ivory-deep bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:border-terracotta/40 hover:text-terracotta;
+    @apply inline-flex min-h-11 items-center justify-center rounded-full border border-ivory-deep bg-transparent px-4 py-2 text-sm font-medium text-ink transition hover:border-terracotta/40 hover:text-terracotta;
   }
 
   .chip {
     @apply inline-flex items-center rounded-full border border-ivory-deep bg-white/60 px-3 py-1 text-xs font-medium text-ink-muted transition;
+  }
+
+  a.chip,
+  button.chip {
+    @apply min-h-11 justify-center;
   }
 
   .chip-active {
@@ -262,5 +269,11 @@
 
   [data-progress-scope][data-progress-state='done'] .progress-title {
     @apply text-ink-muted;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
