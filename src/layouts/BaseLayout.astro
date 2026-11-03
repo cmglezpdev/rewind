@@ -2,6 +2,7 @@
 import Analytics from '@vercel/analytics/astro';
 import '../styles/global.css';
 import ProgressRuntime from '../components/ProgressRuntime.astro';
+import themeScript from '../scripts/theme.js?raw';
 
 interface Props {
   title: string;
@@ -19,6 +20,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site) : unde
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline set:html={themeScript} />
     <meta name="description" content={description} />
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
     <meta property="og:site_name" content="Rewind" />

@@ -12,7 +12,7 @@ const { video, courseName } = Astro.props;
 const showLanguage = Boolean(video.language && video.language !== 'und');
 ---
 
-<article data-progress-scope class="flex h-full flex-col overflow-hidden rounded-xl border border-ivory-deep bg-white/50 shadow-sm transition hover:border-terracotta/30 hover:shadow-md">
+<article data-progress-scope class="flex h-full flex-col overflow-hidden rounded-xl border border-ivory-deep bg-surface/50 shadow-sm transition hover:border-terracotta/30 hover:shadow-md">
   <a href={video.overview.href} class="flex flex-1 flex-col text-ink no-underline">
     <span class="relative block aspect-video overflow-hidden bg-ivory-deep">
       <img
