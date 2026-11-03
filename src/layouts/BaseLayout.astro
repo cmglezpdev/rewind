@@ -2,7 +2,7 @@
 import Analytics from '@vercel/analytics/astro';
 import '../styles/global.css';
 import ProgressRuntime from '../components/ProgressRuntime.astro';
-import themeSource from '../scripts/theme.ts?raw';
+import themeSource from '../lib/theme/bootstrap.ts?raw';
 import { inlineTypeScript } from '../lib/inline-script';
 
 const themeScript = inlineTypeScript(themeSource);

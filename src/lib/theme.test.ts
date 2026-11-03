@@ -4,8 +4,8 @@ import test from 'node:test';
 import { runInNewContext } from 'node:vm';
 import { inlineTypeScript } from './inline-script';
 
-const script = inlineTypeScript(readFileSync(new URL('../scripts/theme.ts', import.meta.url), 'utf8'));
-const selectScript = inlineTypeScript(readFileSync(new URL('../scripts/theme-select.ts', import.meta.url), 'utf8'));
+const script = inlineTypeScript(readFileSync(new URL('./theme/bootstrap.ts', import.meta.url), 'utf8'));
+const selectScript = inlineTypeScript(readFileSync(new URL('./theme/selector.ts', import.meta.url), 'utf8'));
 
 function setup({ saved = null, dark = false, blocked = false, reducedMotion = false, animated = false }: {
   saved?: string | null; dark?: boolean; blocked?: boolean; reducedMotion?: boolean; animated?: boolean;
