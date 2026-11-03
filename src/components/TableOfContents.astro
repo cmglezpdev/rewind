@@ -1,0 +1,33 @@
+---
+import type { Heading } from '../lib/library';
+
+interface Props {
+  headings: Heading[];
+  label?: string;
+  minDepth?: number;
+}
+
+const { headings, label = 'On this page', minDepth = 2 } = Astro.props;
+const items = headings.filter((heading) => heading.depth >= minDepth);
+---
+
+{items.length > 0 && (
+  <nav class="text-sm" aria-label={label}>
+    <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-faint">{label}</p>
+    <ol class="space-y-2 border-l border-ivory-deep pl-3">
+      {items.map((heading) => (
+        <li
+          class="leading-snug"
+          style={`margin-left: ${Math.max(0, heading.depth - minDepth) * 0.75}rem`}
+        >
+          <a
+            href={`#${heading.slug}`}
+            class="text-ink-muted no-underline hover:text-terracotta"
+          >
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

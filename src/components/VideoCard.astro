@@ -1,0 +1,60 @@
+---
+import type { Video } from '../lib/library';
+import { languageLabel, tagLabel } from './labels';
+
+interface Props {
+  video: Video;
+  courseName?: string;
+}
+
+const { video, courseName } = Astro.props;
+const showLanguage = Boolean(video.language && video.language !== 'und');
+---
+
+<article class="flex h-full flex-col overflow-hidden rounded-xl border border-ivory-deep bg-white/50 shadow-sm transition hover:border-terracotta/30 hover:shadow-md">
+  <a href={video.overview.href} class="flex flex-1 flex-col text-ink no-underline">
+    <span class="relative block aspect-video overflow-hidden bg-ivory-deep">
+      <img
+        src={video.image}
+        alt=""
+        width={480}
+        height={270}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition duration-300 hover:scale-[1.02]"
+      />
+    </span>
+    <div class="flex flex-1 flex-col gap-3 p-4">
+      <div>
+        <h3 class="font-serif text-lg font-normal leading-snug hover:text-terracotta">{video.name}</h3>
+        {courseName && (
+          <span class="mt-1 block text-xs uppercase tracking-wide text-ink-faint">{courseName}</span>
+        )}
+      </div>
+      {(video.channel || video.duration) && (
+        <p class="text-xs text-ink-faint">{[video.channel, video.duration].filter(Boolean).join(' · ')}</p>
+      )}
+      <span class="line-clamp-3 flex-1 text-sm leading-relaxed text-ink-muted">{video.description}</span>
+      {(showLanguage || video.tags.length > 0) && (
+        <span class="flex flex-wrap gap-1.5">
+          {showLanguage && <span class="chip">{languageLabel(video.language)}</span>}
+          {video.tags.map((tag) => (
+            <span class="chip">{tagLabel(tag)}</span>
+          ))}
+        </span>
+      )}
+    </div>
+  </a>
+  {video.url && (
+    <div class="px-4 pb-4">
+      <a
+        href={video.url}
+        class="text-xs font-medium text-terracotta no-underline hover:underline"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Watch on YouTube
+      </a>
+    </div>
+  )}
+</article>

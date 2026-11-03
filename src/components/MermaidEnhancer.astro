@@ -1,0 +1,40 @@
+<script>
+  async function renderMermaidBlocks() {
+    const codes = document.querySelectorAll('pre > code.language-mermaid');
+    if (!codes.length) return;
+
+    const mermaid = (await import('mermaid')).default;
+    mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: 'strict',
+      theme: 'neutral',
+    });
+
+    let index = 0;
+    for (const code of codes) {
+      const source = code.textContent?.trim() ?? '';
+      const pre = code.parentElement;
+      if (!pre || !source) continue;
+
+      const mount = document.createElement('div');
+      mount.className = 'mermaid';
+      mount.setAttribute('role', 'img');
+      pre.replaceWith(mount);
+
+      try {
+        const id = `mermaid-diagram-${index++}`;
+        const { svg } = await mermaid.render(id, source);
+        mount.innerHTML = svg;
+      } catch {
+        const fallback = document.createElement('pre');
+        const fallbackCode = document.createElement('code');
+        fallbackCode.className = 'language-mermaid';
+        fallbackCode.textContent = source;
+        fallback.append(fallbackCode);
+        mount.replaceWith(fallback);
+      }
+    }
+  }
+
+  renderMermaidBlocks();
+</script>

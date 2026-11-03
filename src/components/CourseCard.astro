@@ -1,0 +1,45 @@
+---
+import type { Course } from '../lib/library';
+
+interface Props {
+  course: Course;
+  active?: boolean;
+}
+
+const { course, active = false } = Astro.props;
+const cover = course.videos[0]?.image ?? '/placeholder-cover.svg';
+const lessonCount = course.videos.length;
+---
+
+<article
+  class:list={[
+    'flex h-full flex-col overflow-hidden rounded-xl border bg-white/50 shadow-sm transition',
+    active ? 'border-terracotta/50 ring-1 ring-terracotta/30' : 'border-ivory-deep hover:border-terracotta/30',
+  ]}
+>
+  <a href={course.overview.href} class="flex flex-1 flex-col no-underline">
+    <span class="relative block aspect-[16/7] overflow-hidden bg-ivory-deep">
+      <img
+        src={cover}
+        alt=""
+        width={640}
+        height={280}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover"
+      />
+    </span>
+    <div class="flex flex-1 flex-col gap-3 p-4">
+      <h3 class="font-serif text-xl font-normal leading-snug text-ink hover:text-terracotta">{course.name}</h3>
+      <span class="line-clamp-3 flex-1 text-sm leading-relaxed text-ink-muted">{course.description}</span>
+      <span class="text-xs uppercase tracking-wide text-ink-faint">
+        {lessonCount} {lessonCount === 1 ? 'lesson' : 'lessons'}
+      </span>
+    </div>
+  </a>
+  <div class="px-4 pb-4">
+    <a href={`/?course=${encodeURIComponent(course.id)}`} class="text-xs font-medium text-terracotta no-underline hover:underline">
+      Show lessons in catalog
+    </a>
+  </div>
+</article>

@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import ArticleSidebar from '../../components/ArticleSidebar.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
+import DocNav from '../../components/DocNav.astro';
+import MermaidEnhancer from '../../components/MermaidEnhancer.astro';
+import { chapterDocuments, findCourse, findVideo, neighbors } from '../../components/navigation';
+import { kindLabel, languageLabel } from '../../components/labels';
+import { getDocument, getLibrary } from '../../lib/library';
+import { defaultRepository, githubEditUrl } from '../../lib/repository';
+
+export async function getStaticPaths() {
+  const { documents } = await getLibrary();
+  return documents.map((document) => ({
+    params: { id: document.id },
+  }));
+}
+
+const id = Astro.params.id ?? '';
+const library = await getLibrary();
+const document = await getDocument(id);
+
+if (!document) {
+  return new Response(null, { status: 404, statusText: 'Not found' });
+}
+
+const video = findVideo(library, document.videoId);
+const course = findCourse(library, document.courseId ?? video?.courseId);
+const chapters = video ? chapterDocuments(video.documents) : [];
+const { previous, next } = video ? neighbors(video.documents, document.id) : {};
+const tocLabel = document.kind === 'transcript' ? 'Transcript outline' : 'On this page';
+const pageLang = video?.language && video.language !== 'und' ? video.language : 'en';
+const sourceUrl = video?.url || course?.url;
+const sourceLabel = video?.url ? 'Watch on YouTube' : course?.url ? 'Open course source' : '';
+const showSidebar = chapters.length > 0 || Boolean(course);
+const editUrl = githubEditUrl({
+  repositoryUrl: import.meta.env.GITHUB_REPOSITORY_URL ?? defaultRepository.url,
+  branch: import.meta.env.GITHUB_EDIT_BRANCH ?? defaultRepository.branch,
+  sourcePath: document.sourcePath,
+});
+---
+
+<BaseLayout title={document.title} description={video?.description ?? course?.description ?? document.title} lang={pageLang}>
+  <SiteHeader slot="header" courses={library.courses} />
+  <div class="mx-auto max-w-6xl px-4 py-8 md:px-6 lg:py-12">
+    <nav class="mb-6 flex flex-wrap items-center gap-3 text-sm text-ink-muted" aria-label="Breadcrumb">
+      <a href="/" class="text-terracotta no-underline hover:underline">Library</a>
+      {course && (
+        <>
+          <span aria-hidden="true">/</span>
+          <a href={course.overview.href} class="text-terracotta no-underline hover:underline">
+            {course.name}
+          </a>
+        </>
+      )}
+      {video && (
+        <>
+          <span aria-hidden="true">/</span>
+          <a href={video.overview.href} class="text-terracotta no-underline hover:underline">
+            {video.name}
+          </a>
+        </>
+      )}
+      <span aria-hidden="true">/</span>
+      <span class="text-ink">{document.title}</span>
+    </nav>
+
+    {showSidebar && (
+      <div class="mb-6 lg:hidden">
+        <ArticleSidebar
+          collapsible
+          chapters={chapters}
+          currentId={document.id}
+          videoName={video?.name}
+          courseName={course?.name}
+          lessons={course && !video ? course.videos : []}
+          currentVideoId={video?.id}
+        />
+      </div>
+    )}
+
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem] xl:grid-cols-[minmax(0,1fr)_18rem]">
+      <article class="min-w-0">
+        <header class="mb-8 border-b border-ivory-deep pb-6">
+          <p class="text-xs font-semibold uppercase tracking-wide text-terracotta">
+            {kindLabel(document.kind)}
+          </p>
+          <h1 id={document.titleId} class="mt-2 font-serif text-3xl tracking-tight text-ink md:text-4xl">{document.title}</h1>
+          {video && video.language && video.language !== 'und' && (
+            <p class="mt-2 text-sm text-ink-faint">{[video.channel, video.duration, languageLabel(video.language)].filter(Boolean).join(' · ')}</p>
+          )}
+          {(sourceUrl || editUrl) && (
+            <div class="mt-4 flex flex-wrap gap-3">
+              {sourceUrl && <a href={sourceUrl} class="btn-primary no-underline" rel="noopener noreferrer" target="_blank">
+                {sourceLabel}
+              </a>}
+              {video && document.kind !== 'overview' && (
+                <a href={video.overview.href} class="btn-ghost no-underline">Video overview</a>
+              )}
+              {editUrl && <a href={editUrl} class="btn-ghost no-underline" rel="noopener noreferrer" target="_blank">Edit on GitHub</a>}
+            </div>
+          )}
+        </header>
+
+        <div class="article-body" set:html={document.html} />
+
+        <DocNav previous={previous} next={next} />
+      </article>
+
+      <div class="hidden space-y-8 lg:sticky lg:top-24 lg:block lg:self-start">
+        {showSidebar && (
+          <ArticleSidebar
+            chapters={chapters}
+            currentId={document.id}
+            videoName={video?.name}
+            courseName={course?.name}
+            lessons={course && !video ? course.videos : []}
+            currentVideoId={video?.id}
+          />
+        )}
+        <TableOfContents headings={document.headings} label={tocLabel} />
+      </div>
+    </div>
+
+    <div class="mt-10 lg:hidden">
+      <TableOfContents headings={document.headings} label={tocLabel} />
+    </div>
+  </div>
+  <MermaidEnhancer />
+</BaseLayout>

@@ -1,0 +1,164 @@
+---
+import type { NoteDocument, Video } from '../lib/library';
+
+interface Props {
+  chapters?: NoteDocument[];
+  currentId?: string;
+  videoName?: string;
+  courseName?: string;
+  lessons?: Video[];
+  currentVideoId?: string;
+  collapsible?: boolean;
+}
+
+const {
+  chapters = [],
+  currentId = '',
+  videoName,
+  courseName,
+  lessons = [],
+  currentVideoId,
+  collapsible = false,
+} = Astro.props;
+
+const kindLabel: Record<NoteDocument['kind'], string> = {
+  overview: 'Overview',
+  topic: 'Chapter',
+  transcript: 'Transcript',
+  index: 'Index',
+};
+
+const heading = videoName ?? courseName ?? 'Contents';
+const chapterNav = chapters.length > 0;
+const lessonNav = lessons.length > 0;
+---
+
+{
+  collapsible ? (
+    <details class="rounded-xl border border-ivory-deep bg-white/40 p-4">
+      <summary class="cursor-pointer text-sm font-medium text-ink">
+        {chapterNav ? 'Chapters in this video' : 'Course lessons'}
+      </summary>
+      <div class="mt-4 space-y-6">
+        <p class="font-serif text-lg leading-snug text-ink">{heading}</p>
+        {chapterNav && (
+          <nav aria-label="Chapters">
+            <ul class="space-y-1">
+              {chapters.map((doc) => {
+                const active = doc.id === currentId;
+                return (
+                  <li>
+                    <a
+                      href={doc.href}
+                      class:list={[
+                        'block rounded-md px-2 py-1.5 text-sm no-underline transition',
+                        active
+                          ? 'bg-terracotta-soft font-medium text-terracotta-deep'
+                          : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
+                      ]}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      <span class="text-[0.65rem] uppercase tracking-wide text-ink-faint">
+                        {kindLabel[doc.kind]}
+                      </span>
+                      <span class="mt-0.5 block leading-snug">{doc.title}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        )}
+        {lessonNav && (
+          <nav aria-label="Course lessons">
+            <ul class="space-y-1">
+              {lessons.map((lesson) => {
+                const active = lesson.id === currentVideoId;
+                return (
+                  <li>
+                    <a
+                      href={lesson.overview.href}
+                      class:list={[
+                        'block rounded-md px-2 py-1.5 text-sm no-underline transition',
+                        active
+                          ? 'bg-terracotta-soft font-medium text-terracotta-deep'
+                          : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
+                      ]}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {lesson.name}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+        )}
+      </div>
+    </details>
+  ) : (
+    <aside class="space-y-8">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-ink-faint">
+          {videoName ? 'In this video' : 'In this course'}
+        </p>
+        <p class="mt-1 font-serif text-lg leading-snug text-ink">{heading}</p>
+      </div>
+      {chapterNav && (
+        <nav aria-label="Chapters">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-faint">Chapters</p>
+          <ul class="space-y-1">
+            {chapters.map((doc) => {
+              const active = doc.id === currentId;
+              return (
+                <li>
+                  <a
+                    href={doc.href}
+                    class:list={[
+                      'block rounded-md px-2 py-1.5 text-sm no-underline transition',
+                      active
+                        ? 'bg-terracotta-soft font-medium text-terracotta-deep'
+                        : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
+                    ]}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    <span class="text-[0.65rem] uppercase tracking-wide text-ink-faint">
+                      {kindLabel[doc.kind]}
+                    </span>
+                    <span class="mt-0.5 block leading-snug">{doc.title}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
+      {lessonNav && (
+        <nav aria-label="Course lessons">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-ink-faint">Lessons</p>
+          <ul class="space-y-1">
+            {lessons.map((lesson) => {
+              const active = lesson.id === currentVideoId;
+              return (
+                <li>
+                  <a
+                    href={lesson.overview.href}
+                    class:list={[
+                      'block rounded-md px-2 py-1.5 text-sm no-underline transition',
+                      active
+                        ? 'bg-terracotta-soft font-medium text-terracotta-deep'
+                        : 'text-ink-muted hover:bg-ivory-deep/60 hover:text-ink',
+                    ]}
+                    aria-current={active ? 'page' : undefined}
+                  >
+                    {lesson.name}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      )}
+    </aside>
+  )
+}

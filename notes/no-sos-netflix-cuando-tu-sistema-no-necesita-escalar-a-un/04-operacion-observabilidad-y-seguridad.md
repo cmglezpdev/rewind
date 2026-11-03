@@ -1,0 +1,9 @@
+# Operación: costos, observabilidad y seguridad
+
+La operación forma parte de la escalabilidad: un sistema debe responder a la demanda, mostrar lo que ocurre y evitar sorpresas técnicas o económicas.
+
+- **No confíes ciegamente en autoscaling.** Puede tardar más de lo que permite un pico de carga; el aprovisionamiento debe responder al tiempo real que necesita el servicio. [`8:09`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=489)
+- **Controla los costos de nube y de IA.** Una factura inesperada puede poner en riesgo un proyecto. Define presupuestos, alertas y responsables para detectar el gasto antes de recibir un aviso tardío del proveedor. [`16:06`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=966) [`16:38`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=998) [`17:03`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1023)
+- **Instrumenta el recorrido de las peticiones.** Las trazas desde el cliente o frontend hasta los servicios permiten encontrar dónde ocurrió un problema y detectarlo antes de que lo reporte el usuario. La IA también puede ayudar a revisar logs y trazas. [`17:18`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1038) [`17:34`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1054)
+- **Incluye seguridad en las capas relevantes:** código, configuración cloud, frontend, backend, microservicios y funciones serverless. El ponente menciona guías como OWASP Top 10 para enfocar las revisiones según el tipo de aplicación. [`18:22`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1102) [`18:42`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1122)
+- La observabilidad y la seguridad no son extras para cuando haya millones de usuarios. Contribuyen a que un sistema pequeño sea sólido y a que su equipo pueda operar la escala que necesita. [`17:58`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=1078)

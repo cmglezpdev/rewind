@@ -1,0 +1,255 @@
+---
+import type { Course, Video } from '../lib/library';
+import CourseCard from './CourseCard.astro';
+import VideoCard from './VideoCard.astro';
+import { languageLabel, tagLabel } from './labels';
+
+interface Props {
+  videos: Video[];
+  courses: Course[];
+  tags: string[];
+  initialCourseId?: string;
+}
+
+const { videos, courses, tags, initialCourseId = '' } = Astro.props;
+const languages = [...new Set(videos.map((video) => video.language))].sort();
+const courseNameById = new Map(courses.map((course) => [course.id, course.name]));
+const initialVisible = videos.filter((video) => !initialCourseId || video.courseId === initialCourseId).length;
+const payload = JSON.stringify({ videos, initialCourseId });
+---
+
+<section class="mx-auto max-w-6xl px-4 py-10 md:px-6" data-library-root>
+  <div class="mb-10 max-w-2xl">
+    <p class="text-sm font-medium uppercase tracking-widest text-terracotta">Catalog</p>
+    <h1 class="mt-2 font-serif text-4xl tracking-tight text-ink md:text-5xl">Video library</h1>
+    <p class="mt-4 text-lg text-ink-muted">
+      {videos.length} videos and {courses.length} courses, with chapter notes and transcripts.
+      Search by title, then narrow by course, tag, or language.
+    </p>
+  </div>
+
+  {courses.length > 0 && (
+    <div class="mb-10" data-course-strip>
+      <h2 class="mb-4 font-serif text-2xl text-ink">Courses</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {courses.map((course) => (
+          <div data-course-card data-course-id={course.id}>
+            <CourseCard course={course} active={initialCourseId === course.id} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <div class="mb-8 flex flex-col gap-4 rounded-2xl border border-ivory-deep bg-white/40 p-4 md:p-6">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-end">
+      <label class="flex flex-1 flex-col gap-1.5">
+        <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Search</span>
+        <input
+          type="search"
+          name="q"
+          data-filter-search
+          placeholder="Title or description"
+          autocomplete="off"
+          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink placeholder:text-ink-faint/70"
+        />
+      </label>
+      <label class="flex w-full flex-col gap-1.5 lg:w-52">
+        <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Course</span>
+        <select
+          data-filter-course
+          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
+        >
+          <option value="">All videos</option>
+          {courses.map((course) => (
+            <option value={course.id} selected={initialCourseId === course.id}>
+              {course.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label class="flex w-full flex-col gap-1.5 lg:w-44">
+        <span class="text-xs font-medium uppercase tracking-wide text-ink-faint">Language</span>
+        <select
+          data-filter-language
+          class="w-full rounded-lg border border-ivory-deep bg-ivory px-3 py-2.5 text-ink"
+        >
+          <option value="">All languages</option>
+          {languages.map((code) => (
+            <option value={code}>{languageLabel(code)}</option>
+          ))}
+        </select>
+      </label>
+    </div>
+    {tags.length > 0 && (
+      <div>
+        <p class="mb-2 text-xs font-medium uppercase tracking-wide text-ink-faint" id="tag-filter-label">
+          Tags
+        </p>
+        <div class="flex flex-wrap gap-2" data-filter-tags role="group" aria-labelledby="tag-filter-label">
+          {tags.map((tag) => (
+            <button type="button" class="chip" data-tag={tag} aria-pressed="false">
+              {tagLabel(tag)}
+            </button>
+          ))}
+        </div>
+      </div>
+    )}
+    <div class="flex flex-wrap items-center justify-between gap-3 border-t border-ivory-deep pt-4">
+      <p class="text-sm text-ink-muted" data-result-count aria-live="polite">
+        {initialVisible} of {videos.length} videos
+      </p>
+      <button type="button" class="btn-ghost text-xs" data-filter-reset hidden={initialCourseId === ''}>
+        Reset filters
+      </button>
+    </div>
+  </div>
+
+  <h2 class="mb-4 font-serif text-2xl text-ink">Videos</h2>
+  <div
+    data-video-grid
+    class:list={['grid gap-6 sm:grid-cols-2 lg:grid-cols-3', initialVisible === 0 && 'hidden']}
+  >
+    {videos.map((video) => {
+      const visible = !initialCourseId || video.courseId === initialCourseId;
+      return (
+        <div data-video-id={video.id} data-video-card class:list={[!visible && 'hidden']}>
+          <VideoCard video={video} courseName={video.courseId ? courseNameById.get(video.courseId) : undefined} />
+        </div>
+      );
+    })}
+  </div>
+
+  <p
+    class:list={[
+      'rounded-xl border border-dashed border-ivory-deep bg-ivory-deep/20 px-6 py-16 text-center text-ink-muted',
+      initialVisible !== 0 && 'hidden',
+    ]}
+    data-empty-state
+    role="status"
+  >
+    No videos match your search and filters. Reset filters or try a shorter query.
+  </p>
+</section>
+
+<script define:vars={{ payload }}>
+  const root = document.querySelector('[data-library-root]');
+  if (!root) throw new Error('Library root missing');
+
+  const { videos, initialCourseId } = JSON.parse(payload);
+  const searchInput = root.querySelector('[data-filter-search]');
+  const courseSelect = root.querySelector('[data-filter-course]');
+  const languageSelect = root.querySelector('[data-filter-language]');
+  const tagButtons = [...root.querySelectorAll('[data-tag]')];
+  const resetButton = root.querySelector('[data-filter-reset]');
+  const countEl = root.querySelector('[data-result-count]');
+  const grid = root.querySelector('[data-video-grid]');
+  const emptyState = root.querySelector('[data-empty-state]');
+  const cards = [...root.querySelectorAll('[data-video-card]')];
+  const courseCards = [...root.querySelectorAll('[data-course-card]')];
+
+  const videoById = new Map(videos.map((video) => [video.id, video]));
+  let activeTag = '';
+
+  const urlCourse = new URLSearchParams(window.location.search).get('course') ?? initialCourseId ?? '';
+  if (courseSelect && [...courseSelect.options].some((option) => option.value === urlCourse)) {
+    courseSelect.value = urlCourse;
+  }
+
+  function normalize(value) {
+    return value.trim().toLowerCase();
+  }
+
+  function matches(video) {
+    const query = normalize(searchInput?.value ?? '');
+    const courseId = courseSelect?.value ?? '';
+    const language = languageSelect?.value ?? '';
+    if (courseId && video.courseId !== courseId) return false;
+    if (language && video.language !== language) return false;
+    if (activeTag && !video.tags.includes(activeTag)) return false;
+    if (!query) return true;
+    const haystack = `${video.name} ${video.description}`.toLowerCase();
+    return haystack.includes(query);
+  }
+
+  function filtering() {
+    return (
+      normalize(searchInput?.value ?? '') !== '' ||
+      (courseSelect?.value ?? '') !== '' ||
+      (languageSelect?.value ?? '') !== '' ||
+      activeTag !== ''
+    );
+  }
+
+  function updateTagsUi() {
+    for (const button of tagButtons) {
+      const tag = button.getAttribute('data-tag') ?? '';
+      const on = tag === activeTag;
+      button.classList.toggle('chip-active', on);
+      button.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+  }
+
+  function syncCourseUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const courseId = courseSelect?.value ?? '';
+    if (courseId) params.set('course', courseId);
+    else params.delete('course');
+    const query = params.toString();
+    const next = query ? `${window.location.pathname}?${query}` : window.location.pathname;
+    history.replaceState(null, '', next);
+    window.dispatchEvent(new Event('catalog-course-change'));
+  }
+
+  function applyFilters() {
+    let visible = 0;
+    for (const card of cards) {
+      const id = card.getAttribute('data-video-id') ?? '';
+      const video = videoById.get(id);
+      const show = video ? matches(video) : false;
+      card.classList.toggle('hidden', !show);
+      if (show) visible += 1;
+    }
+    const courseId = courseSelect?.value ?? '';
+    for (const card of courseCards) {
+      const id = card.getAttribute('data-course-id') ?? '';
+      card.classList.toggle('ring-1', courseId !== '' && id === courseId);
+      const article = card.querySelector('article');
+      article?.classList.toggle('border-terracotta/50', courseId !== '' && id === courseId);
+    }
+    resetButton?.toggleAttribute('hidden', !filtering());
+    grid?.classList.toggle('hidden', visible === 0);
+    emptyState?.classList.toggle('hidden', visible !== 0);
+    if (countEl) {
+      countEl.textContent = `${visible} of ${videos.length} videos`;
+    }
+  }
+
+  searchInput?.addEventListener('input', applyFilters);
+  courseSelect?.addEventListener('change', () => {
+    syncCourseUrl();
+    applyFilters();
+  });
+  languageSelect?.addEventListener('change', applyFilters);
+  for (const button of tagButtons) {
+    button.addEventListener('click', () => {
+      const tag = button.getAttribute('data-tag') ?? '';
+      activeTag = activeTag === tag ? '' : tag;
+      updateTagsUi();
+      applyFilters();
+    });
+  }
+  resetButton?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (courseSelect) courseSelect.value = '';
+    if (languageSelect) languageSelect.value = '';
+    activeTag = '';
+    updateTagsUi();
+    syncCourseUrl();
+    applyFilters();
+    searchInput?.focus();
+  });
+
+  updateTagsUi();
+  applyFilters();
+</script>

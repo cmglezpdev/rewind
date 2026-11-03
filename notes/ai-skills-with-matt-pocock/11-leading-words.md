@@ -1,0 +1,17 @@
+# Leading words
+
+- Matt initially thought AI required throwing away older software practices and starting fresh. [`50:54`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3054)
+- He experimented with spec-driven development and found that repeated spec-to-code loops often made the code worse than hand-coding. [`51:21`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3081)
+- He concluded that agents need good feedback loops just as humans do. [`52:13`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3133)
+- Reading The Pragmatic Programmer pushed him toward concepts like software entropy, tracer bullets, programming by coincidence, and working within feedback loops. [`52:33`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3153)
+- He argues agents can produce software entropy faster than humans because they generate code quickly without long-term strategic judgment. [`53:16`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3196)
+- A tracer bullet means building a thin, working path across layers so feedback arrives early. [`53:40`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3220)
+- Matt saw agents build horizontal layers in isolation, then fail late when the database, application layer, and React components finally met. [`53:40`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3220)
+- He prefers vertical slices because they cross integration layers and reveal whether the system actually makes sense. [`54:29`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3269)
+- A "leading word" is a repeated phrase in a prompt or skill that activates a useful concept in the model and changes its behavior. [`54:58`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3298)
+- The Philosophy of Software Design gave him more agent-useful language, especially "deep modules." [`55:30`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3330)
+- Domain-driven design led him toward building a shared domain language between the human, the codebase, and the agent. [`56:53`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3413)
+- His "Grill with Docs" idea builds domain language during planning so later prompts can be shorter and clearer. [`57:17`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3437)
+- In one app, the term "materialization cascade" captured a complex rule about turning ghost lessons, sections, and courses into real ones. [`57:45`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3465)
+- A codebase with explicit domain terms is easier for an agent to search and navigate. [`58:10`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3490)
+- Matt argues that agents make healthy codebases more important because each session starts fresh, like a new starter with no memory. [`1:00:10`](https://www.youtube.com/watch?v=4DhcSPkEbwI&t=3610)

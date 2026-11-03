@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import LibraryCatalog from '../components/LibraryCatalog.astro';
+import { getLibrary } from '../lib/library';
+
+const library = await getLibrary();
+const courseParam = Astro.url.searchParams.get('course') ?? '';
+const initialCourseId = library.courses.some((course) => course.id === courseParam) ? courseParam : '';
+---
+
+<BaseLayout title="Library">
+  <SiteHeader slot="header" courses={library.courses} activeCourseId={initialCourseId || undefined} />
+  <LibraryCatalog
+    videos={library.videos}
+    courses={library.courses}
+    tags={library.tags}
+    initialCourseId={initialCourseId}
+  />
+</BaseLayout>

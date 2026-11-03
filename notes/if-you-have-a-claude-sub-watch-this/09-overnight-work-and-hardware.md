@@ -1,0 +1,11 @@
+# Overnight work and hardware choices
+
+## Keep work running after the laptop closes
+
+- Moving execution off the daily laptop removes the hesitation to start work before a meeting, leaving the office, or sleeping. [`59:05`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3545)
+- His proposed home setup is an old computer running Ubuntu, connected through Tailscale, hosting the proxy on a residential connection, and available through T3 Code. [`59:29`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3569)
+- For a free starting machine, he suggests asking friends or family for an old laptop or desktop with at least 8 GB RAM and four cores. Later he suggests even 4–8 GB can be useful; this is workload-dependent advice. [`59:50`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3590) [`1:02:25`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3745)
+- His cost example compares a $275/month Hetzner server with 32 GB RAM and 16 threads against a $700 purchased box with 32 GB RAM and a 1 TB drive. He favors buying, at roughly two and a half months of the quoted rent, rather than claiming the rented machine is the bargain. [`1:00:11`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3611) [`1:00:29`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3629)
+- These boxes execute tools and builds; they do not run model inference locally. He estimates 60–80 W at worst for the discussed machine and expects only one or two CPU threads busy most of the time. [`1:00:55`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3655) [`1:01:15`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3675)
+- His 32-core server shows CPU usage rounding to 0% with about six agent threads active. This snapshot supports his claim that waiting agents alone need little CPU; it is not a sustained build benchmark. [`1:01:15`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3675) [`1:01:38`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3698)
+- He prefers Linux and attributes Mac parallel-work limits to filesystem and security behavior. This is his diagnosis and experience, not an operating-system benchmark demonstrated here. [`1:01:53`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3713) [`1:02:25`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=3745)

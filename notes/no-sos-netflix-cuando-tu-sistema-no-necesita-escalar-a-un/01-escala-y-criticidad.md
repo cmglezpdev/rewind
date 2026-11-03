@@ -1,0 +1,9 @@
+# La escala no es lo mismo que la criticidad
+
+La charla es una ponencia de conferencia basada en la experiencia de Juan Rodríguez Monti, ingeniero y manager, con trabajo en sistemas y seguridad. La propuesta es deliberadamente opinionada y no pretende ser una lista universal de mejores prácticas. [`0:03`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=3) [`6:21`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=381)
+
+- **Escalar tiene más de un sentido.** Significa atender más usuarios, pero también permitir que varias personas desarrollen en paralelo y mantener los servicios funcionando. [`3:22`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=202)
+- **La capacidad necesaria depende del producto.** Un servicio para 200 personas puede necesitar mucha calidad si esas personas realizan tareas críticas. No conviene diseñarlo para millones por defecto. [`3:55`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=235) [`4:23`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=263)
+- **Volumen y criticidad son ejes distintos.** Sistemas médicos, financieros, de licitaciones públicas o logística pueden tener pocos usuarios y aun así requerir alta confiabilidad. [`4:57`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=297) [`7:13`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=433)
+- **Imitar a grandes plataformas puede desviar la atención.** Kubernetes, microservicios y varias zonas de disponibilidad no resuelven por sí mismos los problemas reales del producto. La charla contrapone esas decisiones con una infraestructura pequeña y controlable como ejemplo, no como receta. [`5:21`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=321) [`5:54`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=354)
+- El objetivo es construir para las personas que el sistema necesita atender hoy y dejar bases que permitan crecer si la demanda cambia. [`12:10`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=730) [`12:24`](https://www.youtube.com/watch?v=nGeiH6GSIuU&t=744)

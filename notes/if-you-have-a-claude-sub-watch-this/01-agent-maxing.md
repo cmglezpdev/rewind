@@ -1,0 +1,8 @@
+# Agent maxing: purpose and limits
+
+- Theo frames agent maxing as keeping multiple independent agent tasks running at once. His opening challenge is whether the viewer already has at least five threads working. [`0:00`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=0)
+- The sequence is capacity, access, productive use, experiments, then work that continues while the user and laptop sleep. The goal is to adapt the examples rather than copy an exact formula. [`2:43`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=163) [`3:02`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=182) [`3:30`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=210)
+- He reports producing over 100 PRs a day part-time. This is a personal throughput claim, not a measured comparison of code quality or business outcomes. [`3:02`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=182)
+- Dollar-denominated usage figures describe inference valued at API rates, not cash spent. He reports roughly $1,000 paid for $50,000 of token value. [`4:31`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=271)
+- The initial reassurance about bans is anecdotal: among over 30 accounts used by his circle, he describes two temporary bans of one friend. Later he explicitly acknowledges possible bans and terms violations. [`0:39`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=39) [`14:41`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=881)
+- A later qualification matters for spending: he advises people without developer employment to avoid stacking subscriptions until they are making money. [`35:43`](https://www.youtube.com/watch?v=D8PikZ1KhUo&t=2143)

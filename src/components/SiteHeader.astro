@@ -1,0 +1,93 @@
+---
+import type { Course } from '../lib/library';
+
+interface Props {
+  courses: Course[];
+  activeCourseId?: string;
+}
+
+const { courses, activeCourseId } = Astro.props;
+const onLibrary = Astro.url.pathname === '/' || Astro.url.pathname === '';
+---
+
+<header class="sticky top-0 z-40 border-b border-ivory-deep bg-ivory/95 backdrop-blur-sm" data-site-header>
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-6">
+    <div class="flex min-w-0 items-center gap-6">
+      <a href="/" class="font-serif text-xl tracking-tight text-ink no-underline hover:text-terracotta">
+        Video Notes
+      </a>
+      <nav class="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <a
+          href="/"
+          data-nav-course=""
+          class:list={[
+            'rounded-full px-3 py-1.5 text-sm no-underline transition',
+            onLibrary && !activeCourseId ? 'bg-terracotta-soft text-terracotta-deep' : 'text-ink-muted hover:text-terracotta',
+          ]}
+          aria-current={onLibrary && !activeCourseId ? 'page' : undefined}
+        >
+          Library
+        </a>
+        {courses.map((course) => {
+          const active = activeCourseId === course.id;
+          return (
+            <a
+              href={`/?course=${encodeURIComponent(course.id)}`}
+              data-nav-course={course.id}
+              class:list={[
+                'max-w-[12rem] truncate rounded-full px-3 py-1.5 text-sm no-underline transition',
+                active ? 'bg-terracotta-soft text-terracotta-deep' : 'text-ink-muted hover:text-terracotta',
+              ]}
+              aria-current={active ? 'page' : undefined}
+              title={course.name}
+            >
+              {course.name}
+            </a>
+          );
+        })}
+      </nav>
+    </div>
+    <a href="/notes/readme/" class="text-sm text-ink-muted no-underline hover:text-terracotta">
+      Markdown index
+    </a>
+  </div>
+  <nav class="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 pb-3 md:hidden" aria-label="Courses">
+    <a
+      href="/"
+      data-nav-course=""
+      class:list={['chip shrink-0 no-underline', onLibrary && !activeCourseId && 'chip-active']}
+      aria-current={onLibrary && !activeCourseId ? 'page' : undefined}
+    >
+      Library
+    </a>
+    {courses.map((course) => (
+      <a
+        href={`/?course=${encodeURIComponent(course.id)}`}
+        data-nav-course={course.id}
+        class:list={['chip shrink-0 no-underline', activeCourseId === course.id && 'chip-active']}
+        aria-current={activeCourseId === course.id ? 'page' : undefined}
+      >
+        {course.name}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  function updateCourseNavigation() {
+    if (!header || window.location.pathname !== '/') return;
+    const courseId = new URLSearchParams(window.location.search).get('course') ?? '';
+    for (const link of header.querySelectorAll('[data-nav-course]')) {
+      const match = (link.getAttribute('data-nav-course') ?? '') === courseId;
+      if (match) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
+      link.classList.toggle('chip-active', match);
+      link.classList.toggle('bg-terracotta-soft', match);
+      link.classList.toggle('text-terracotta-deep', match);
+      link.classList.toggle('text-ink-muted', !match);
+    }
+  }
+  updateCourseNavigation();
+  window.addEventListener('catalog-course-change', updateCourseNavigation);
+</script>
