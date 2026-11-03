@@ -47,3 +47,11 @@ The importer copies Markdown and images, skips identical files, and stops before
 `npm run migrate:frontmatter -- /path/to/legacy-metadata.json` accepts a JSON object with `videos` and `courses` dictionaries keyed by folder path. Each entry uses the old `name`, `description`, `url`, `image`, `tags`, `language`, `channel`, and `duration` fields.
 
 The migration adds YAML to README files, converts local cover paths and tag spelling, preserves every body byte, and skips files that already have frontmatter. A local snapshot of the previous catalog is in `.local/legacy-metadata.json`; it is excluded from Git and is not needed for normal operation.
+
+## Reading progress
+
+Readers mark chapters as read in the browser. Progress is kept in `localStorage` under `rewind:progress:v1` as `{ "<chapter id>": { "readAt": "<ISO date>" } }`; video and course percentages are derived from it. Only numbered chapter notes count; overviews and transcripts do not.
+
+Storage sits behind the `ProgressStore` port in `src/lib/progress-port.ts`. To move progress to a database, write another adapter that satisfies the contract documented there (`src/lib/progress-store.test.ts` runs one suite against every adapter) and return it from `createStore` in `src/lib/progress-client.ts`. Nothing else changes.
+
+`/progress-manifest.json` is generated at build time and tells the browser which chapters belong to which video and course.
