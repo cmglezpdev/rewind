@@ -1,0 +1,7 @@
+# Architecture basics and the question being tested
+
+- The experiment asks what performance is lost when an eight-vCPU application becomes four services on four two-vCPU servers with the same total RAM. It also tests protocol choice and placement. [`0:00`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=0) [`0:20`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=20)
+- A monolith is built and deployed as one unit. It can contain separate modules; clear internal boundaries make it a modular monolith. [`1:02`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=62)
+- Microservices run those pieces as separate applications and expose interfaces to other services. An in-process function call becomes an API request and response. [`1:02`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=62) [`1:21`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=81)
+- Service calls add connection management, request encoding, transport, response decoding, and coordination. They also introduce timeouts, overloaded dependencies, and version mismatches. [`1:21`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=81) [`1:41`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=101)
+- Independent deployment and resource allocation motivate microservices, but benchmarking only measures part of that architectural tradeoff. [`0:20`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=20) [`0:49`](https://www.youtube.com/watch?v=bhklFv_VRq8&t=49)
