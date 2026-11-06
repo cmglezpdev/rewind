@@ -1,0 +1,7 @@
+# The UI problem and experiment
+
+- T3 Code is free and open source, with no revenue or full-time UI designer. Users supply model inference, usually through subscriptions. This motivates trying to improve its design with agents. [`0:21`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=21) [`0:41`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=41)
+- Robin's criticism identifies concrete inconsistencies in fonts, border radii, icons, and font hierarchy. Theo agrees the UI needs work despite earlier polish improvements. [`5:17`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=317)
+- The experiment asks whether repeated evaluation can produce good UI for a real product. Theo introduces it as roughly 18 hours across five models and more than 30 review rounds, with the resulting design available behind a beta setting at recording time. [`1:03`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=63) [`1:31`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=91)
+- His starting request includes a screenshot of the criticism and asks for a UI polish PR. The stopping condition is agreement from the review council that app screenshots deserve at least 9/10 for design quality. [`5:40`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=340) [`6:09`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=369)
+- Theo uses `/goal`, but argues that a well-written prompt without the command should support the same behavior. The useful ingredient is the task and its stopping condition. [`5:40`](https://www.youtube.com/watch?v=xq0eB8vxeqk&t=340)
