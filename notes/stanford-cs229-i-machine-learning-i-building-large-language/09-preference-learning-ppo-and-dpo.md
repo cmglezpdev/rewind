@@ -1,0 +1,25 @@
+# Preference learning, PPO, and DPO
+
+## Why go beyond SFT
+
+- Behavioral cloning asks a model to imitate demonstrations. Humans can often recognize better writing than they can produce themselves, so imitation can limit answer quality. Writing an ideal answer is also costly. [`1:10:05`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4205) [`1:10:28`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4228) [`1:10:37`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4237) [`1:12:15`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4335)
+- The lecturer presents a hypothesis that SFT can encourage hallucination even with correct demonstrations: an unfamiliar but real citation may teach a model to produce plausible references without knowing whether they exist. This is a proposed mechanism, not an established explanation for every hallucination. [`1:10:55`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4255) [`1:11:17`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4277) [`1:11:41`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4301) [`1:11:54`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4314)
+- Preference collection instead generates two answers from a fine-tuned model and asks a labeler which is better. Training then favors the preferred response. [`1:12:37`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4357) [`1:12:56`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4376)
+
+## Reward model and PPO
+
+1. Collect human preferences over pairs of answers. [`1:12:56`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4376)
+2. Train a reward model that maps a prompt and complete answer to one scalar score. [`1:14:16`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4456) [`1:15:46`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4546) [`1:16:09`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4569)
+3. Fit pairwise preferences with the Bradley–Terry model: \(P(y_a\succ y_b\mid x)=\frac{e^{r(x,y_a)}}{e^{r(x,y_a)}+e^{r(x,y_b)}}\). Reward scores act as logits in the pairwise softmax. [`1:14:45`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4485) [`1:15:01`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4501) [`1:15:22`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4522)
+4. Use generated responses as rollouts and optimize the language-model policy with PPO. Add regularization because the reward model only approximates human preferences and can be overoptimized. [`1:16:53`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4613) [`1:17:12`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4632)
+5. Repeat data collection and optimization. The lecture describes the original ChatGPT pipeline as SFT, reward modeling, then PPO. [`1:18:11`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4691) [`1:18:34`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4714)
+
+- Continuous reward scores provide a richer optimization signal than a simple +1/-1 win against a baseline, but remain learned proxies for preferences. [`1:13:46`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4426) [`1:13:57`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4437) [`1:16:09`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4569)
+- PPO introduces implementation complexity through rollouts, loops, clipping, and other training details. [`1:18:50`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4730) [`1:19:11`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4751) [`1:19:25`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4765)
+
+## Direct preference optimization
+
+- DPO directly trains from preferred and rejected response pairs. At a high level it increases the preferred response's relative likelihood and decreases the rejected response's relative likelihood, avoiding a separately trained reward model and PPO rollout loop. [`1:19:49`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4789) [`1:20:08`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4808) [`1:21:08`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4868)
+- The full objective includes additional terms. The lecturer states that its optimum matches the corresponding regularized preference-learning objective under assumptions, but does not derive those assumptions or the loss in this talk. The high-level intuition alone is not an implementation recipe. [`1:20:33`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4833) [`1:20:49`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4849)
+- A learned reward model can score additional unlabeled examples, while the DPO setup described here trains directly on labeled pairs. [`1:21:54`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4914) [`1:22:08`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4928)
+- In the presented AlpacaFarm comparison, preference optimization improves over SFT, and DPO and PPO have the same reported performance. This supports DPO's simpler training procedure for those experiments, not universal equivalence on every task. [`1:23:05`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=4985) [`1:23:22`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=5002) [`1:23:38`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=5018)

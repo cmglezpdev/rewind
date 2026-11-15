@@ -1,0 +1,22 @@
+# Scaling laws and resource allocation
+
+## What a scaling law predicts
+
+- Empirical scaling laws relate held-out loss to training compute, dataset size, and model size. The lecture's plots become approximately linear on log-log axes, enabling extrapolation from smaller runs. These are empirical patterns, not theoretical guarantees. [`40:54`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2454) [`41:33`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2493) [`41:52`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2512) [`42:09`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2529) [`42:30`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2550) [`43:01`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2581)
+- The lecturer's claim that "overfitting doesn't happen" describes the large-data scaling regime shown. It should not be read as a guarantee for arbitrary datasets or training schedules; the later discussion explicitly shows repeated fine-tuning can overfit. [`41:12`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2472) [`1:35:16`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=5716)
+- Compare both slope and intercept. A method that starts worse can win at larger scale if its loss improves faster. In the illustrated comparison, transformers beat LSTMs on both. [`46:56`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2816) [`47:12`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2832) [`47:30`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2850) [`47:53`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2873)
+- The lecturer argues that many small architecture changes mainly shift the intercept, while data quality can materially improve the scaling curve. This is the lecture's practical argument for prioritizing data and systems. [`48:50`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2930) [`49:12`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2952)
+
+## Plan a large run from small runs
+
+1. Establish a scaling recipe for hyperparameters; the example reduces learning rate as model size increases. [`45:40`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2740)
+2. Tune smaller models at several sizes. [`45:55`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2755)
+3. Fit scaling curves and extrapolate performance at the target budget. [`46:09`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2769) [`46:28`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2788)
+4. Spend most of the budget on the chosen final run. The hypothetical 30-day example allocates 3 days to small experiments and 27 days to the final model, rather than selecting among 30 one-day large runs. [`45:05`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2705) [`45:26`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2726) [`45:55`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2755) [`46:09`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2769)
+
+## Model size versus training tokens
+
+- IsoFLOP curves hold training compute constant while varying parameter count and token count. Select the lowest-loss point on each curve, then fit how optimal model and data sizes grow with compute. [`49:42`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2982) [`49:58`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2998) [`50:17`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3017) [`50:32`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3032) [`50:50`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3050)
+- The Chinchilla rule reported here is approximately 20 training tokens per parameter for training-compute efficiency. Increasing parameter count should therefore come with more training data. [`51:23`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3083) [`51:44`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3104)
+- Deployment changes the objective. A smaller model trained on more tokens can reduce repeated inference costs; the lecture cites roughly 150 tokens per parameter as an example from work accounting for inference. This is not a universal optimum independent of usage. [`52:02`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3122) [`52:17`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3137) [`52:37`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3157)
+- The "bitter lesson" argument favors methods that can use growing compute effectively, with simple, well-executed training and systems rather than elaborate small architecture changes. [`54:08`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3248) [`54:28`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3268) [`54:49`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3289)

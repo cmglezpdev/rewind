@@ -1,0 +1,20 @@
+# Pretraining data
+
+## Turning crawled pages into a corpus
+
+- "Train on the internet" hides substantial work. The lecture describes raw crawls as noisy HTML, incomplete text, and material unlike a curated encyclopedia. It cites Common Crawl at roughly 250 billion pages and 1 petabyte as lecture-era scale estimates. [`28:38`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1718) [`29:22`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1762) [`30:00`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1800) [`30:21`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1821)
+
+1. Extract useful text from HTML. Preserve difficult content such as mathematics while removing repeated headers, footers, and menus. [`30:40`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1840) [`30:55`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1855) [`33:19`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1999)
+2. Filter unwanted material, including harmful content and personal information, using website blacklists and classifiers. Each filter requires engineering at corpus scale. [`31:10`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1870) [`31:32`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1892)
+3. Deduplicate repeated pages, alternate URLs with the same content, and copied passages. The lecture notes that book paragraphs can appear thousands of times. [`31:48`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1908) [`32:08`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1928)
+4. Apply quality heuristics such as unusual token distributions, extreme word lengths, and suspiciously short or long pages. [`32:28`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1948) [`32:43`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=1963)
+5. Train quality classifiers. One example uses pages referenced by Wikipedia as a proxy for high-quality documents and random web pages as a comparison group. This is a quality proxy, not a guarantee that every reference is good. [`33:38`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2018) [`33:58`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2038) [`34:21`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2061)
+6. Classify domains and tune sampling weights. The lecture describes upweighting books and code and downweighting entertainment; the claim that code improves general reasoning is explicitly presented as informal. [`34:41`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2081) [`34:59`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2099) [`35:16`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2116)
+7. Finish with high-quality data while reducing the learning rate. The examples include Wikipedia and collected human data. [`35:33`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2133) [`35:52`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2152)
+
+## Scale and unresolved questions
+
+- The Pile illustrates a mix of scientific papers, PubMed Central, Wikipedia, Stack Exchange, GitHub, and books. Such curated sources alone cannot supply an arbitrarily large corpus. [`39:39`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2379) [`39:59`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2399)
+- Reported token counts are 2 trillion for Llama 2 and 15 trillion for Llama 3. The lecturer's GPT-4 estimate comes from unconfirmed leaks and should not be treated as a known training specification. [`40:14`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2414) [`40:29`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2429)
+- Research questions include efficient processing, domain balancing, synthetic data, and whether multimodal training improves text performance. The lecturer also notes commercial secrecy and copyright concerns as obstacles to understanding training corpora. [`38:04`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2284) [`38:20`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2300) [`38:41`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2321)
+- No reliable staffing requirement is established. The lecturer explicitly says he does not know and gives only a rough team-size guess. [`37:02`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2222) [`37:29`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=2249)

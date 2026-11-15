@@ -1,0 +1,5 @@
+# Scope and further study
+
+- Transformer architecture and inference optimization are outside the lecture's detailed scope. Tiling, distributed parallelization, and mixture-of-experts models are mentioned but not explained. [`2:00`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=120) [`53:23`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=3203) [`1:43:07`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=6187)
+- Open questions include user interfaces, multimodal models, misuse, limits on available training data, and the legality of data collection. The lecturer points to ChatGPT's simple interface as an important part of its adoption. [`1:43:27`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=6207) [`1:43:42`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=6222)
+- Suggested Stanford courses are CS224N for background and historical context, CS324 for broader LLM readings and lectures, and CS336 for building an LLM from scratch. The lecturer warns that CS336 has a heavy workload. [`1:43:42`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=6222) [`1:44:01`](https://www.youtube.com/watch?v=9vM4p9NN0Ts&t=6241)
